@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Log;
+
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 use App\Models\User;
 
@@ -14,39 +18,31 @@ class AuthController extends Controller
 {
     public function login(Request $request){  
         Log::info($request);
-        try {    
-            // $request->validate([      
-            //         'name' => 'required',      
-            //         'password' => 'required'    
-            // ]);    
-            $validator = \Validator::make($request->all(), [
-                'name' => ['required'],
-                'password' => ['required'],
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json(['resultado' => 'NoOk', 'errors'=>$validator->errors()->all()]); 
-            }
+        try {         
+            $credentials = request(['user', 'password']);    
             
-            $credentials = request(['name', 'password']);    
-            
-            if (!Auth::attempt($credentials)) {      
-                return response()->json([        
-                                    'status_code' => 500,        
-                                    'message' => 'Unauthorized'      
-                                ]);    
+            if (!Auth::attempt($credentials)) {    
+                Log::info("Intenta conectarse"); 
+                return new JsonResponse([
+                    'message' => 'La información de usuario y contraseña no es autorizada',
+                    'errors' => ''
+                ], Response::HTTP_UNPROCESSABLE_ENTITY); 
+                // return response()->json([        
+                //                     'status_code' => 500,        
+                //                     'message' => 'Unauthorized'      
+                //                 ]);    
             }    
             
-            $user = User::where('user', $request->email)->first();    
+            $user = User::where('user', $request->user)->first();    
             
-            if ( ! Hash::check($request->password, $user->password, [])) {       
-                throw new \Exception('Error in Login');    
-            }    
+            // if ( ! \Hash::check($request->password, $user->password, [])) {       
+            //     throw new \Exception('Error in Login');    
+            // }    
             
             $tokenResult = $user->createToken('authToken')->plainTextToken;    
             return response()->json([      
                 'status_code' => 200,      
-                'access_token' => $tokenResult,      
+                'token' => $tokenResult,      
                 'token_type' => 'Bearer',    
             ]);  
         } catch (Exception $error) {    

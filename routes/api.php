@@ -23,7 +23,7 @@ use App\Http\Controllers\AuthController;
 //     Route::get('/users', 'UserController@index');
 // });
 //Route::post('/login', 'Auth\AuthController@login');
-Route::post('/login', ['as'=>'login', 'uses'=>'App\Http\Controllers\AuthController@login']);
+Route::post('/signin', ['as'=>'signin', 'uses'=>'App\Http\Controllers\AuthController@login']);
 //Route::post('/login', [AuthController::class], 'login')->name('login');
 
 // Route::middleware(['auth:sanctum'])->group(function () { 
