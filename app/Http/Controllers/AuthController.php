@@ -16,7 +16,7 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    public function login(Request $request){  
+    public function login(LoginRequest $request){  
         Log::info($request);
         try {         
             $credentials = request(['user', 'password']);    
