@@ -27,7 +27,7 @@ class LoginRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        Log::info("Falla validacion");
+        //Log::info("Falla validacion");
         $response = new JsonResponse([
                 'message' => 'Verifique la siguiente información:',
                 'errors' => $validator->errors()

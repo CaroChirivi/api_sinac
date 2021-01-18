@@ -21,30 +21,31 @@ class AuthController extends Controller
         try {         
             $credentials = request(['user', 'password']);    
             
-            if (!Auth::attempt($credentials)) {    
-                Log::info("Intenta conectarse"); 
-                return new JsonResponse([
-                    'message' => 'La información de usuario y contraseña no es autorizada',
-                    'errors' => ''
-                ], Response::HTTP_UNPROCESSABLE_ENTITY); 
-                // return response()->json([        
-                //                     'status_code' => 500,        
-                //                     'message' => 'Unauthorized'      
-                //                 ]);    
-            }    
+            if (Auth::attempt($credentials)) {    
+                $user = Auth::user();
+                //$token = $user->createToken('authToken')->plainTextToken; 
+                //return $user->createToken('token-name', ['server:update'])->plainTextToken;
+
+                // if ($user->tokenCan('server:update')) {
+                //     //
+                // }
+                
+                Log::info($user);
+                return response()->json([      
+                    'status' => 200,      
+                    'token' => $user->createToken('authToken')->plainTextToken,    
+                    'user' => ["name" => $user->name, "email" => $user->email]
+                    //'token_type' => 'Bearer',    
+                ]);  
+            }   
             
-            $user = User::where('user', $request->user)->first();    
+            return new JsonResponse([
+                'message' => 'La información de usuario y contraseña no es autorizada',
+                'errors' => '',
+                'status' => Response::HTTP_UNPROCESSABLE_ENTITY
+            ], Response::HTTP_UNPROCESSABLE_ENTITY); 
             
-            // if ( ! \Hash::check($request->password, $user->password, [])) {       
-            //     throw new \Exception('Error in Login');    
-            // }    
             
-            $tokenResult = $user->createToken('authToken')->plainTextToken;    
-            return response()->json([      
-                'status_code' => 200,      
-                'token' => $tokenResult,      
-                'token_type' => 'Bearer',    
-            ]);  
         } catch (Exception $error) {    
             return response()->json([      
                 'status_code' => 500,      
