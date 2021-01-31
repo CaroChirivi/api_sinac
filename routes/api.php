@@ -26,6 +26,6 @@ use App\Http\Controllers\AuthController;
 Route::post('/signin', ['as'=>'signin', 'uses'=>'App\Http\Controllers\AuthController@login']);
 //Route::post('/signin', [AuthController::class], 'login')->name('signin');
 
-// Route::middleware(['auth:sanctum'])->group(function () { 
-//     Route::get('/users', 'UserController@index');
-// });
+Route::middleware(['auth:sanctum'])->group(function () { 
+    Route::get('/logout', ['as'=>'logout', 'uses'=>'App\Http\Controllers\AuthController@logout']);
+});

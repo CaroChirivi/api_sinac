@@ -54,4 +54,17 @@ class AuthController extends Controller
             ]);  
         }
     }
+
+    public function logout()
+    {
+        Auth::user()->tokens()->delete();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        Auth::guard('web')->logout();
+
+        return response()->json([      
+            'status' => 200,      
+            'message' => "Sesión finalizada exitosamente"  
+        ]); 
+    }
 }
