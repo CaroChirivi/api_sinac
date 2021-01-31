@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-use App\Models\User;
+use App\Models\Team;
 
 class AuthController extends Controller
 {
@@ -31,16 +31,18 @@ class AuthController extends Controller
                 // }
                 
                 Log::info($user);
+                $team_member = Team::find($user->team_id);
+                Log::info($team_member);
                 return response()->json([      
                     'status' => 200,      
                     'token' => $user->createToken('authToken')->plainTextToken,    
-                    'user' => ["name" => $user->name, "email" => $user->email]
+                    'user' => ["name" => $team_member->full_name, "email" => $user->email]
                     //'token_type' => 'Bearer',    
                 ]);  
             }   
             
             return new JsonResponse([
-                'message' => 'La información de usuario y contraseña no es autorizada',
+                'message' => 'La información de usuario y contraseña no es correcta',
                 'errors' => '',
                 'status' => Response::HTTP_UNPROCESSABLE_ENTITY
             ], Response::HTTP_UNPROCESSABLE_ENTITY); 
