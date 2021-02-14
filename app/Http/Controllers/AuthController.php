@@ -16,6 +16,7 @@ use App\Models\Team;
 
 class AuthController extends Controller
 {
+
     public function login(LoginRequest $request){  
         Log::info($request);
         try {         
@@ -29,14 +30,13 @@ class AuthController extends Controller
                 // if ($user->tokenCan('server:update')) {
                 //     //
                 // }
-                
-                Log::info($user);
+                //Log::info($user);
                 $team_member = Team::find($user->team_id);
-                Log::info($team_member);
+                //Log::info($team_member);
                 return response()->json([      
                     'status' => 200,      
                     'token' => $user->createToken('authToken')->plainTextToken,    
-                    'user' => ["name" => $team_member->full_name, "email" => $user->email]
+                    'user' => ["name" => $team_member->full_name, "email" => $user->email],
                     //'token_type' => 'Bearer',    
                 ]);  
             }   

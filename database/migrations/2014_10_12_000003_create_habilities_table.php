@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateHabilitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,26 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('habilities', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_spanish_ci';
+
             $table->id();
-            $table->string('user');
-            $table->string('email')->unique();
-            $table->string('password');
             $table->foreignId('rol_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreignId('team_id')
-                ->unique()
+            $table->foreignId('menu_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->softDeletes($column = 'deleted_at', $precision = 0);
+            $table->boolean('create')->default(0);
+            $table->boolean('delete')->default(0);
+            $table->boolean('show')->default(0);
+            $table->boolean('update')->default(0);
+            
+            $table->unique(['rol_id', 'menu_id']);
         });
     }
 
@@ -38,6 +43,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('habilities');
     }
 }

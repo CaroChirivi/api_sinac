@@ -28,4 +28,6 @@ Route::post('/signin', ['as'=>'signin', 'uses'=>'App\Http\Controllers\AuthContro
 
 Route::middleware(['auth:sanctum'])->group(function () { 
     Route::get('/logout', ['as'=>'logout', 'uses'=>'App\Http\Controllers\AuthController@logout']);
+    /* Home routes */
+    Route::get('/home/quickButtons', ['as' => 'home.quickButtons', 'uses' => 'App\Http\Controllers\HomeController@quickButtons']);
 });

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTeamsTable extends Migration
+class CreateRolsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateTeamsTable extends Migration
      */
     public function up()
     {
-        Schema::create('teams', function (Blueprint $table) {
+        Schema::create('rols', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_spanish_ci';
+            
             $table->id();
-            $table->string('cedula', 15)->unique();
             $table->string('name', 50);
-            $table->string('last_name', 50);
-            $table->string('phone1', 15);
-            $table->string('phone2', 15);
-            $table->string('email', 50)->unique();
-            $table->boolean('enabled')->default(true);
+            $table->string('description', 300)->nullable();
         });
     }
 
@@ -32,6 +31,6 @@ class CreateTeamsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('teams');
+        Schema::dropIfExists('rols');
     }
 }

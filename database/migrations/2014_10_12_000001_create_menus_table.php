@@ -14,6 +14,10 @@ class CreateMenusTable extends Migration
     public function up()
     {
         Schema::create('menus', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_spanish_ci';
+            
             $table->id();
             $table->string('description', 100);
             $table->string('url', 50)->nullable();
@@ -25,6 +29,7 @@ class CreateMenusTable extends Migration
                 ->onDelete('cascade');
             $table->string('icon', 50)->nullable();
             $table->boolean('direct_access')->default(1);
+            $table->string('direct_access_image', 50)->nullable();
             $table->boolean('draw')->default(1);
         });
     }
